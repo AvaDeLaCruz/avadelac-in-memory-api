@@ -1,8 +1,13 @@
 const express = require("express"); //CommonJS import
-
+const cors = require("cors");
 const app = express();
 
 app.use(express.json()); //middleware yay
+app.use(
+  cors({
+    origin: "http://localhost:3000"
+  })
+);
 
 const db = {
   posts: [
@@ -77,4 +82,4 @@ app.put("/api/v1/posts/:id", (request, response) => {
   }
 });
 
-app.listen(8000);
+app.listen(process.env.PORT || 8000);
