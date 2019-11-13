@@ -2,5 +2,16 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1"
-  }
+  },
+  "name": "crud-api",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "test": ""
+  },
+  "author": "",
+  "license": "MIT",
+  "description": ""
 }
