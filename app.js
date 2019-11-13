@@ -95,6 +95,11 @@ app.get("/api/posts/:id", (request, response) => {
   }
 });
 
+app.get("/api/posts/:id/comments", (request, response) => {
+  const id = Number(request.params.id);
+  response.json(db.comments.filter(comment => comment.post === id));
+});
+
 app.delete("/api/posts/:id", (request, response) => {
   const id = Number(request.params.id);
   const post = db.posts.find(post => {
