@@ -1,6 +1,6 @@
-In-memory API built using Node.js
+# In-memory API built using Node.js
 
-Endpoints: \
+## Endpoints: \
 `GET /api/posts` \
 `GET /api/comments` \
 `POST /api/posts` \
