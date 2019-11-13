@@ -1,4 +1,4 @@
-# In-memory API built using Node.js
+# In-memory API built using Node, Express
 
 ## Endpoints
 `GET /api/posts` \
