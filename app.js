@@ -1,11 +1,17 @@
-const express = require("express"); //CommonJS import
+const express = require("express");
 const cors = require("cors");
 const app = express();
 
-app.use(express.json()); //middleware yay
+const { ENVIRONMENT, PORT } = process.env;
+const IS_DEVELOPMENT = ENVIRONMENT === "development";
+
+// middleware
+app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000"
+    origin: IS_DEVELOPMENT
+      ? "http://localhost:3000"
+      : "https://dtang-react-crud.surge.sh"
   })
 );
 
@@ -14,25 +20,34 @@ const db = {
     {
       id: 1,
       title: "Post 1",
-      body: "Something here..."
+      body: "something here..."
     },
     {
       id: 2,
       title: "Post 2",
-      body: "Something else here..."
+      body: "something else here..."
+    },
+    {
+      id: 3,
+      title: "Post 3",
+      body: "something else here..."
     }
   ]
 };
 
-// get all posts
-app.get("/api/v1/posts", (request, response) => {
+app.get("/api/posts", (request, response) => {
   response.json(db.posts);
 });
 
-// get single post
-app.get("/api/v1/posts/:id", (request, response) => {
-  const id = parseInt(request.params.id);
-  //   get post w/ given id
+app.post("/api/posts", (request, response) => {
+  const post = request.body;
+  post.id = db.posts.length + 1;
+  db.posts.push(post);
+  response.json(post);
+});
+
+app.get("/api/posts/:id", (request, response) => {
+  const id = Number(request.params.id);
   const post = db.posts.find(post => {
     return post.id === id;
   });
@@ -44,20 +59,13 @@ app.get("/api/v1/posts/:id", (request, response) => {
   }
 });
 
-app.post("/api/v1/posts", (request, response) => {
-  const post = request.body;
-  post.id = db.posts.length + 1;
-  db.posts.push(post);
-  response.json(post);
-});
-
-app.delete("/api/v1/posts/:id", (request, response) => {
-  const id = parseInt(request.params.id);
+app.delete("/api/posts/:id", (request, response) => {
+  const id = Number(request.params.id);
   const post = db.posts.find(post => {
     return post.id === id;
   });
+
   if (post) {
-    //   delete
     db.posts = db.posts.filter(post => {
       return post.id !== id;
     });
@@ -67,14 +75,13 @@ app.delete("/api/v1/posts/:id", (request, response) => {
   }
 });
 
-app.put("/api/v1/posts/:id", (request, response) => {
-  const id = parseInt(request.params.id);
+app.put("/api/posts/:id", (request, response) => {
+  const id = Number(request.params.id);
   const post = db.posts.find(post => {
     return post.id === id;
   });
+
   if (post) {
-    //   edit and update post
-    // Object.assign(target, new-data);
     Object.assign(post, request.body);
     response.json(post);
   } else {
@@ -82,4 +89,4 @@ app.put("/api/v1/posts/:id", (request, response) => {
   }
 });
 
-app.listen(process.env.PORT || 8000);
+app.listen(PORT || 8000);
