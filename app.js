@@ -30,6 +30,18 @@ const db = {
       title: "Post 3",
       body: "something else here..."
     }
+  ],
+  comments: [
+    {
+      id: 1,
+      post: 3,
+      body: "comment for post 3"
+    },
+    {
+      id: 2,
+      post: 1,
+      body: "comment for post 2"
+    }
   ]
 };
 
@@ -37,11 +49,22 @@ app.get("/api/posts", (request, response) => {
   response.json(db.posts);
 });
 
+app.get("/api/comments", (request, response) => {
+  response.json(db.comments);
+});
+
 app.post("/api/posts", (request, response) => {
   const post = request.body;
   post.id = db.posts.length + 1;
   db.posts.push(post);
   response.json(post);
+});
+
+app.post("/api/comments", (request, response) => {
+  const comment = request.body;
+  comment.id = db.comments.length + 1;
+  db.comments.push(comment);
+  response.json(comment);
 });
 
 app.get("/api/posts/:id", (request, response) => {
