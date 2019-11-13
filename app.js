@@ -116,6 +116,16 @@ app.delete("/api/posts/:id", (request, response) => {
   }
 });
 
+app.delete("/api/comments/:id", (request, response) => {
+  const id = Number(request.params.id);
+  // if comment doesn't exist in db, return error code
+  const originalLength = db.comments.length;
+  db.comments = db.comments.filter(comment => comment.id !== id);
+  db.comments.length === originalLength
+    ? response.status(404).send()
+    : response.status(204).send();
+});
+
 app.put("/api/posts/:id", (request, response) => {
   const id = Number(request.params.id);
   const post = db.posts.find(post => {
