@@ -118,8 +118,8 @@ app.delete("/api/posts/:id", (request, response) => {
 
 app.delete("/api/comments/:id", (request, response) => {
   const id = Number(request.params.id);
-  // if comment doesn't exist in db, return error code
   const originalLength = db.comments.length;
+  // if filter finds the item w/ given id, will delete it & array length will change
   db.comments = db.comments.filter(comment => comment.id !== id);
   db.comments.length === originalLength
     ? response.status(404).send()
@@ -135,6 +135,20 @@ app.put("/api/posts/:id", (request, response) => {
   if (post) {
     Object.assign(post, request.body);
     response.json(post);
+  } else {
+    response.status(404).send();
+  }
+});
+
+app.put("/api/comments/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const comment = db.comments.find(comment => {
+    return comment.id === id;
+  });
+
+  if (comment) {
+    comment.body = request.body.body;
+    response.status(204).send();
   } else {
     response.status(404).send();
   }
