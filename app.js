@@ -60,8 +60,17 @@ app.post("/api/posts", (request, response) => {
   response.json(post);
 });
 
+const error = {
+  errors: {
+    post: "post is required"
+  }
+};
+
 app.post("/api/comments", (request, response) => {
   const comment = request.body;
+  if (!comment.hasOwnProperty("post")) {
+    response.status(400).json(error);
+  }
   comment.id = db.comments.length + 1;
   db.comments.push(comment);
   response.json(comment);
