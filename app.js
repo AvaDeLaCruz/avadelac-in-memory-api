@@ -68,9 +68,15 @@ const error = {
 
 app.post("/api/comments", (request, response) => {
   const comment = request.body;
+  // if payload does not contain 'post' attribute, return error msg
   if (!comment.hasOwnProperty("post")) {
     response.status(400).json(error);
   }
+  // if db does not contain post with id in payload, return
+  if (db.posts.filter(post => post.id === comment.post).length < 1) {
+    response.status(404).send();
+  }
+  // else, add the comment to the db
   comment.id = db.comments.length + 1;
   db.comments.push(comment);
   response.json(comment);
